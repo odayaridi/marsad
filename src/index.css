@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { @apply bg-slate-50 text-slate-800; font-feature-settings: 'cv11', 'ss01'; }
+  ::selection { background: #c9f1ea; }
+  *:focus-visible { outline: 2px solid #428bd3; outline-offset: 2px; }
+}
+
+/* Grid/flex children must be allowed to shrink so wide tables scroll inside their card instead of the page */
+.grid > * { min-width: 0; }
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar { height: 6px; width: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+.recharts-wrapper:focus, .recharts-surface:focus, .recharts-wrapper *:focus { outline: none !important; }
+
+@media print {
+  aside, header, footer, .no-print { display: none !important; }
+  main { padding: 0 !important; }
+  .lg\:pl-64, .lg\:pl-\[72px\] { padding-left: 0 !important; }
+}
