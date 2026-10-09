@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight, Network, Radar, ClipboardCheck, TrendingUp, Activity, MessageSquareText, ShieldCheck, CheckCircle2, XCircle, Building2,
   FlaskConical, Stethoscope, Landmark, BedDouble, Pill, PhoneCall, Sunrise, Lock, Clock, Users, HeartPulse, Droplet, Wind, ChevronRight,
+  MessageCircle, X, ChevronLeft,
 } from 'lucide-react';
 import logoLockup from '../assets/logo-lockup.png';
 import logoFull from '../assets/logo-full.png';
@@ -97,6 +99,108 @@ function HeroMock() {
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+const CHAT_QUESTIONS = [
+  {
+    question: 'What is Marsad?',
+    answer: 'Marsad is an AI early-warning platform for hospitals. It connects hospitals, labs and primary-care centres, combines their anonymised data, and every morning tells each hospital which chronic-disease emergencies (diabetic, cardiac, respiratory) are likely to rise in the next 7–14 days.',
+  },
+  {
+    question: 'Who is it for?',
+    answer: 'The main user is the hospital medical director. ER heads, lab directors, PHC coordinators and Ministry of Public Health analysts also use it, each with their own view. Patients benefit because they get called and treated before they end up in the ER.',
+  },
+  {
+    question: 'How does Marsad predict a surge?',
+    answer: 'It looks for early signals across partners: rising lab values (such as HbA1c), missed prescription refills and missed clinic follow-ups. It combines these with stressors like heatwaves, power cuts and medicine shortages. The AI then forecasts admissions for each district, condition and age group.',
+  },
+  {
+    question: 'How early and how accurate are the warnings?',
+    answer: 'Marsad aims for a 7–14 day head start. In back-testing on past surges, the median warning time was 9 days. Every forecast shows a confidence level and a range, so directors know how much to rely on it.',
+  },
+  {
+    question: 'Why should a director trust an alert?',
+    answer: 'Every alert explains itself. It shows which signals caused it, how much each one contributed and where the data came from. Directors can rate each alert, and those ratings are tracked during the pilot.',
+  },
+  {
+    question: 'Is patient data safe?',
+    answer: 'Yes. Data is de-identified at the source, so names never leave the partner’s system. Results are shown only at district and age-group level, and small groups are hidden. Access depends on each user’s role, and every view or export is logged. Marsad never sells data.',
+  },
+  {
+    question: 'Does Marsad replace our hospital IT system?',
+    answer: 'No. It works alongside your existing hospital system (HIS) and lab system, and alongside the Ministry’s national surveillance. It adds what they don’t have: a network-wide, forward-looking view of chronic disease.',
+  },
+  {
+    question: 'What does the hospital actually get each day?',
+    answer: 'A 2-minute morning brief with three parts:\n\n• what’s rising, with a risk map and a 14-day forecast;\n• suggested actions: reserve beds, check medicine stock, ask clinics to call high-risk patients, adjust staff rotas;\n• a full-screen mode for the 7:45 bed huddle.',
+  },
+  {
+    question: 'How much does it cost?',
+    answer: 'The first 3 months are a free pilot. After that it’s an annual subscription by hospital size:\n\n• $4,800 for under 100 beds;\n• $9,600 for 100–250 beds;\n• $18,000 for over 250 beds.\n\nLabs and clinics join free. The Ministry, insurers and donors can buy a district licence for about $40,000 a year.',
+  },
+  {
+    question: 'How do we join the pilot?',
+    answer: 'Contact the Marsad team. We sign a data-sharing agreement, connect your data feeds (usually within the first week), and start the free 90-day pilot in Mount Lebanon. A monthly review and a quarterly impact report show the results to your board and the Ministry.',
+  },
+];
+
+function MarsadChat() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+
+  const closeChat = () => {
+    setIsOpen(false);
+    setSelectedQuestion(null);
+  };
+
+  return (
+    <div className="fixed bottom-5 right-4 z-50 sm:bottom-6 sm:right-6">
+      {isOpen && (
+        <section id="marsad-chat" aria-label="Marsad questions" className="absolute bottom-16 right-0 flex h-[min(38rem,calc(100vh-7rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-navy-900/20 sm:bottom-18">
+          <div className="flex items-center justify-between bg-navy-900 px-5 py-4 text-white">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-400 text-navy-900"><MessageCircle className="h-5 w-5" /></div>
+              <div>
+                <div className="text-sm font-bold">Ask Marsad</div>
+                <div className="text-xs text-navy-100/75">Quick answers about the platform</div>
+              </div>
+            </div>
+            <button type="button" onClick={closeChat} aria-label="Close Marsad questions" className="rounded-lg p-2 text-navy-100 transition hover:bg-white/10 hover:text-white">
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {selectedQuestion ? (
+            <div className="flex min-h-0 flex-1 flex-col p-4">
+              <button type="button" onClick={() => setSelectedQuestion(null)} className="inline-flex w-fit items-center gap-1 rounded-lg px-1 py-1 text-sm font-semibold text-teal-700 transition hover:text-teal-800">
+                <ChevronLeft className="h-4 w-4" /> All questions
+              </button>
+              <div className="mt-4 overflow-y-auto pr-1 scrollbar-thin">
+                <div className="rounded-xl bg-slate-100 px-4 py-3 text-sm font-semibold text-navy-900">{selectedQuestion.question}</div>
+                <p className="mt-3 whitespace-pre-line rounded-xl border border-teal-100 bg-teal-50/70 px-4 py-3 text-sm leading-relaxed text-slate-700">{selectedQuestion.answer}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="min-h-0 flex-1 overflow-y-auto p-4 scrollbar-thin">
+              <p className="mb-3 px-1 text-sm text-slate-500">Choose a question to learn more.</p>
+              <div className="space-y-2">
+                {CHAT_QUESTIONS.map((item) => (
+                  <button key={item.question} type="button" onClick={() => setSelectedQuestion(item)} className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm font-semibold text-navy-800 transition hover:border-teal-300 hover:bg-teal-50/60 hover:text-teal-800">
+                    <span>{item.question}</span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-teal-600" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+      <button type="button" onClick={() => setIsOpen((open) => !open)} aria-expanded={isOpen} aria-controls="marsad-chat" aria-label={isOpen ? 'Close Marsad questions' : 'Ask Marsad a question'} className="flex h-14 items-center gap-2 rounded-full bg-navy-800 px-4 text-sm font-bold text-white shadow-lg shadow-navy-900/25 transition hover:bg-navy-700 focus-visible:outline-offset-4 sm:h-14">
+        <MessageCircle className="h-5 w-5 text-teal-300" />
+        <span>Ask Marsad</span>
+      </button>
     </div>
   );
 }
@@ -362,6 +466,7 @@ export default function Landing() {
           </div>
         </div>
       </footer>
+      <MarsadChat />
       {/* preload full logo for login */}
       <link rel="prefetch" href={logoFull} />
     </div>
